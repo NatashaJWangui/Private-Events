@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   resources :users, only: [ :show ]
   resources :events do
-    resources :event_attendances, only: [:create, :destroy]
+    resources :event_attendances, only: [ :create, :destroy ]
   end
   root "events#index"
 

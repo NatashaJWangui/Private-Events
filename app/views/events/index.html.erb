@@ -1,18 +1,55 @@
 <div class="container">
-  <h1>Private Events</h1>
-  
-  <div class="events-list">
-    <% if @events.any? %>
-      <% @events.each do |event| %>
-        <div class="event-card">
+  <div class="header-section">
+    <h1>Private Events</h1>
+    
+    <div class="nav-links">
+      <% if user_signed_in? %>
+        <p>Welcome, <%= current_user.name %>!</p>
+        <%= link_to 'Create Event', new_event_path, class: 'btn btn-success' %>
+        <%= link_to 'My Profile', user_path(current_user), class: 'btn btn-info' %>
+        <%= link_to 'Sign Out', destroy_user_session_path, method: :delete, class: 'btn btn-outline-danger' %>
+      <% else %>
+        <%= link_to 'Sign In', new_user_session_path, class: 'btn btn-primary' %>
+        <%= link_to 'Sign Up', new_user_registration_path, class: 'btn btn-success' %>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Upcoming Events -->
+  <div class="upcoming-events">
+    <h2>Upcoming Events (<%= @upcoming_events.count %>)</h2>
+    <% if @upcoming_events.any? %>
+      <% @upcoming_events.each do |event| %>
+        <div class="event-card upcoming">
           <h3><%= link_to event.title, event_path(event) %></h3>
           <p><strong>Date:</strong> <%= event.date.strftime("%B %d, %Y at %I:%M %p") %></p>
           <p><strong>Location:</strong> <%= event.location %></p>
+          <p><strong>Created by:</strong> <%= link_to event.creator.name, user_path(event.creator) %></p>
+          <p><strong>Attendees:</strong> <%= event.attendees.count %></p>
           <p><%= truncate(event.description, length: 100) %></p>
         </div>
       <% end %>
     <% else %>
-      <p>No events yet. Be the first to create one!</p>
+      <p>No upcoming events. <%= link_to 'Create the first one!', new_event_path if user_signed_in? %></p>
+    <% end %>
+  </div>
+
+  <!-- Past Events -->
+  <div class="past-events">
+    <h2>Past Events (<%= @past_events.count %>)</h2>
+    <% if @past_events.any? %>
+      <% @past_events.each do |event| %>
+        <div class="event-card past">
+          <h3><%= link_to event.title, event_path(event) %></h3>
+          <p><strong>Date:</strong> <%= event.date.strftime("%B %d, %Y at %I:%M %p") %></p>
+          <p><strong>Location:</strong> <%= event.location %></p>
+          <p><strong>Created by:</strong> <%= link_to event.creator.name, user_path(event.creator) %></p>
+          <p><strong>Attendees:</strong> <%= event.attendees.count %></p>
+          <p><%= truncate(event.description, length: 100) %></p>
+        </div>
+      <% end %>
+    <% else %>
+      <p>No past events yet.</p>
     <% end %>
   </div>
 </div>
