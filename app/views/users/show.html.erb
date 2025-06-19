@@ -1,0 +1,20 @@
+<div class="container">
+  <h1><%= @user.name %>'s Profile</h1>
+  
+  <div class="created-events">
+    <h2>Events Created</h2>
+    <% if @created_events.any? %>
+      <% @created_events.each do |event| %>
+        <div class="event-card">
+          <h3><%= link_to event.title, event_path(event) %></h3>
+          <p><strong>Date:</strong> <%= event.date.strftime("%B %d, %Y at %I:%M %p") %></p>
+          <p><strong>Location:</strong> <%= event.location %></p>
+        </div>
+      <% end %>
+    <% else %>
+      <p>No events created yet.</p>
+    <% end %>
+  </div>
+  
+  <%= link_to 'Back to Events', events_path, class: 'btn btn-secondary' %>
+</div>

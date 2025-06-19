@@ -1,0 +1,17 @@
+<div class="container">
+  <h1><%= @event.title %></h1>
+  
+  <div class="event-details">
+    <p><strong>Description:</strong> <%= @event.description %></p>
+    <p><strong>Date:</strong> <%= @event.date.strftime("%B %d, %Y at %I:%M %p") %></p>
+    <p><strong>Location:</strong> <%= @event.location %></p>
+    <p><strong>Created by:</strong> <%= link_to @event.creator.name, user_path(@event.creator) %></p>
+  </div>
+  
+  <div class="actions">
+    <%= link_to 'All Events', events_path, class: 'btn btn-secondary' %>
+    <% if user_signed_in? %>
+      <%= link_to 'Create New Event', new_event_path, class: 'btn btn-success' %>
+    <% end %>
+  </div>
+</div>
