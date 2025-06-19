@@ -8,10 +8,47 @@
     <p><strong>Created by:</strong> <%= link_to @event.creator.name, user_path(@event.creator) %></p>
   </div>
   
+  <!-- Attendance Section -->
+  <% if user_signed_in? %>
+    <div class="attendance-section">
+      <% if @event.attendees.include?(current_user) %>
+        <p class="alert alert-success">You are attending this event!</p>
+        <%= link_to 'Cancel Attendance', 
+                    event_event_attendance_path(@event, @event.event_attendances.find_by(user: current_user)), 
+                    method: :delete, 
+                    class: 'btn btn-warning',
+                    confirm: 'Are you sure you want to cancel your attendance?' %>
+      <% elsif @event.creator == current_user %>
+        <p class="alert alert-info">You are the creator of this event.</p>
+      <% else %>
+        <%= link_to 'Attend Event', 
+                    event_event_attendances_path(@event), 
+                    method: :post, 
+                    class: 'btn btn-success' %>
+      <% end %>
+    </div>
+  <% else %>
+    <p><%= link_to 'Sign in to attend this event', new_user_session_path %></p>
+  <% end %>
+  
+  <!-- Attendees List -->
+  <div class="attendees-section">
+    <h3>Attendees (<%= @event.attendees.count %>)</h3>
+    <% if @event.attendees.any? %>
+      <ul class="attendees-list">
+        <% @event.attendees.each do |attendee| %>
+          <li><%= link_to attendee.name, user_path(attendee) %></li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p>No attendees yet. Be the first!</p>
+    <% end %>
+  </div>
+  
   <div class="actions">
     <%= link_to 'All Events', events_path, class: 'btn btn-secondary' %>
     <% if user_signed_in? %>
-      <%= link_to 'Create New Event', new_event_path, class: 'btn btn-success' %>
+      <%= link_to 'Create New Event', new_event_path, class: 'btn btn-primary' %>
     <% end %>
   </div>
 </div>
